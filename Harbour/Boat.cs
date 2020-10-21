@@ -9,6 +9,7 @@ namespace Harbour
         public string IdentityNumber { get; set; }
         public int Weight { get; set; }
         public int TopSpeed { get; set; }
+        public int Counter { get; set; }
         public Boat(string identityNumber, int weight, int topSpeed)
         {
             IdentityNumber = identityNumber;
@@ -20,9 +21,10 @@ namespace Harbour
     class RowingBoat : Boat
     {
         public int Passengers { get; set; }
-        public RowingBoat(string identityNumber, int weight, int topSpeed, int passengers)
+        public RowingBoat(string identityNumber, int weight, int topSpeed, int counter, int passengers)
             : base(identityNumber, weight, topSpeed)
         {
+            Counter = counter;
             Passengers = passengers;
         }
     }
@@ -30,9 +32,10 @@ namespace Harbour
     class MotorBoat : Boat
     {
         public int HorsePower { get; set; }
-        public MotorBoat(string identityNumber, int weight, int topSpeed, int horsePower)
+        public MotorBoat(string identityNumber, int weight, int topSpeed, int counter, int horsePower)
             : base(identityNumber, weight, topSpeed)
         {
+            Counter = counter;
             HorsePower = horsePower;
         }
     }
@@ -40,9 +43,10 @@ namespace Harbour
     class SailingBoat : Boat
     {
         public int BoatLenght { get; set; }
-        public SailingBoat(string identityNumber, int weight, int topSpeed, int boatLenght)
+        public SailingBoat(string identityNumber, int weight, int topSpeed, int counter, int boatLenght)
             : base(identityNumber, weight, topSpeed)
         {
+            Counter = counter;
             BoatLenght = boatLenght;
         }
     }
@@ -50,9 +54,10 @@ namespace Harbour
     class CargoShip : Boat
     {
         public int ContainerCargo { get; set; }
-        public CargoShip(string identityNumber, int weight, int topSpeed, int containerCargo)
+        public CargoShip(string identityNumber, int weight, int topSpeed, int counter, int containerCargo)
             : base(identityNumber, weight, topSpeed)
         {
+            Counter = counter;
             ContainerCargo = containerCargo;
         }
     }
