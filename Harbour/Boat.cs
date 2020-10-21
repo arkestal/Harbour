@@ -56,4 +56,12 @@ namespace Harbour
             ContainerCargo = containerCargo;
         }
     }
+    class DummyBoat : Boat
+    {
+        public DummyBoat(string identityNumber, int weight, int topSpeed)
+            : base("", 0, 0)
+        {
+
+        }
+    }
 }
