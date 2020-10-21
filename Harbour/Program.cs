@@ -18,38 +18,27 @@ namespace Harbour
                 switch (approachingVessel)
                 {
                     case 1:
-                        RowingBoat rowingBoat = new RowingBoat($"R-{GetID()}", GetWeight(100, 300), GetSpeed(0, 3), SpecialStuff(1, 6));
+                        RowingBoat rowingBoat = new RowingBoat($"R-{GetID()}", GetValue(100, 300), GetValue(0, 3), GetValue(1, 6));
+
                         break;
                     case 2:
-                        MotorBoat motorBoat = new MotorBoat($"M-{GetID()}", GetWeight(200, 3000), GetSpeed(0, 60), SpecialStuff(10, 1000));
+                        MotorBoat motorBoat = new MotorBoat($"M-{GetID()}", GetValue(200, 3000), GetValue(0, 60), GetValue(10, 1000));
                         break;
                     case 3:
-                        SailingBoat sailingBoat = new SailingBoat($"S-{GetID()}", GetWeight(800, 6000), GetSpeed(0, 12), SpecialStuff(10, 60));
+                        SailingBoat sailingBoat = new SailingBoat($"S-{GetID()}", GetValue(800, 6000), GetValue(0, 12), GetValue(10, 60));
                         break;
                     case 4:
-                        CargoShip cargoShip = new CargoShip($"L-{GetID()}", GetWeight(3000, 20000), GetSpeed(0, 20), SpecialStuff(0, 500));
+                        CargoShip cargoShip = new CargoShip($"L-{GetID()}", GetValue(3000, 20000), GetValue(0, 20), GetValue(0, 500));
                         break;
                 }
             }
             Console.ReadLine();
         }
 
-        private static int SpecialStuff(int a, int b)
+        private static int GetValue(int a, int b)
         {
-            int numberOfPassengers = random.Next(a, b + 1);
-            return numberOfPassengers;
-        }
-
-        private static int GetSpeed(int a, int b)
-        {
-            int topSpeed = random.Next(a, b + 1);
-            return topSpeed;
-        }
-
-        private static int GetWeight(int a, int b)
-        {
-            int weight = random.Next(a, b + 1);
-            return weight;
+            int value = random.Next(a, b + 1);
+            return value;
         }
 
         private static void WriteOutHarbour()
