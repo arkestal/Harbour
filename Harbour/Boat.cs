@@ -9,20 +9,22 @@ namespace Harbour
         public string IdentityNumber { get; set; }
         public int Weight { get; set; }
         public int TopSpeed { get; set; }
+        public string TokenSign { get; set; }
         public int Counter { get; set; }
-        public Boat(string identityNumber, int weight, int topSpeed)
+        public Boat(string identityNumber, int weight, int topSpeed, string tokenSign)
         {
             IdentityNumber = identityNumber;
             Weight = weight;
             TopSpeed = topSpeed;
+            TokenSign = tokenSign;
         }
     }
     
     class RowingBoat : Boat
     {
         public int Passengers { get; set; }
-        public RowingBoat(string identityNumber, int weight, int topSpeed, int counter, int passengers)
-            : base(identityNumber, weight, topSpeed)
+        public RowingBoat(string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int passengers)
+            : base(identityNumber, weight, topSpeed, "R")
         {
             Counter = counter;
             Passengers = passengers;
@@ -32,8 +34,8 @@ namespace Harbour
     class MotorBoat : Boat
     {
         public int HorsePower { get; set; }
-        public MotorBoat(string identityNumber, int weight, int topSpeed, int counter, int horsePower)
-            : base(identityNumber, weight, topSpeed)
+        public MotorBoat(string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int horsePower)
+            : base(identityNumber, weight, topSpeed, "M")
         {
             Counter = counter;
             HorsePower = horsePower;
@@ -43,8 +45,8 @@ namespace Harbour
     class SailingBoat : Boat
     {
         public int BoatLenght { get; set; }
-        public SailingBoat(string identityNumber, int weight, int topSpeed, int counter, int boatLenght)
-            : base(identityNumber, weight, topSpeed)
+        public SailingBoat(string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int boatLenght)
+            : base(identityNumber, weight, topSpeed, "S")
         {
             Counter = counter;
             BoatLenght = boatLenght;
@@ -54,8 +56,8 @@ namespace Harbour
     class CargoShip : Boat
     {
         public int ContainerCargo { get; set; }
-        public CargoShip(string identityNumber, int weight, int topSpeed, int counter, int containerCargo)
-            : base(identityNumber, weight, topSpeed)
+        public CargoShip(string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int containerCargo)
+            : base(identityNumber, weight, topSpeed, "L")
         {
             Counter = counter;
             ContainerCargo = containerCargo;
@@ -63,8 +65,8 @@ namespace Harbour
     }
     class DummyBoat : Boat
     {
-        public DummyBoat(string identityNumber, int weight, int topSpeed)
-            : base("", 0, 0)
+        public DummyBoat(string identityNumber, int weight, int topSpeed, string tokenSign)
+            : base("", 0, 0, " ")
         {
 
         }
