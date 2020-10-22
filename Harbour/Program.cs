@@ -5,25 +5,41 @@ namespace Harbour
     class Program
     {
         public static int vesselsPerDay = 5;
-        public static int x = 8;
+        public static int x = 64;
         public static int y = 2;
         public static Boat[,] harbour = new Boat[x, y];
         public static Random random = new Random();
-        public static DummyBoat dummy = new DummyBoat("", 0, 0, tokenSign:" ");
+        public static DummyBoat dummy = new DummyBoat("", 0, 0, tokenSign: " ");
         public static RowingBoat rowingBoat;
         public static MotorBoat motorBoat;
         public static SailingBoat sailingBoat;
         public static CargoShip cargoShip;
         static void Main(string[] args)
         {
+            bool isRunning = true;
             EmptyHarbour();
+            while (isRunning)
+            {
+                NewDayHappenings();
+                Console.Clear();
+                WriteOutHarbour();
+                string input = Console.ReadLine();
+                if (input == "q")
+                {
+                    isRunning = false;
+                }
+            }
+        }
+
+        private static void NewDayHappenings()
+        {
             for (int i = 0; i < vesselsPerDay; i++)
             {
                 int approachingVessel = random.Next(1, 4 + 1);
                 switch (approachingVessel)
                 {
                     case 1:
-                        rowingBoat = new RowingBoat($"R-{GetID()}", GetValue(100, 300), GetValue(0, 3), tokenSign:"R", 1, GetValue(1, 6));
+                        rowingBoat = new RowingBoat($"R-{GetID()}", GetValue(100, 300), GetValue(0, 3), tokenSign: "R", 1, GetValue(1, 6));
                         if (harbour[x - 1, 0] == dummy)
                         {
                             harbour[x - 1, 0] = rowingBoat;
@@ -51,19 +67,81 @@ namespace Harbour
                         }
                         break;
                     case 2:
-                        motorBoat = new MotorBoat($"M-{GetID()}", GetValue(200, 3000), GetValue(0, 60), tokenSign:"M", 3, GetValue(10, 1000));
+                        motorBoat = new MotorBoat($"M-{GetID()}", GetValue(200, 3000), GetValue(0, 60), tokenSign: "M", 3, GetValue(10, 1000));
+                        PlaceVessel(1);
                         break;
                     case 3:
-                        sailingBoat = new SailingBoat($"S-{GetID()}", GetValue(800, 6000), GetValue(0, 12), tokenSign:"S", 4, GetValue(10, 60));
+                        sailingBoat = new SailingBoat($"S-{GetID()}", GetValue(800, 6000), GetValue(0, 12), tokenSign: "S", 4, GetValue(10, 60));
+                        PlaceVessel(2);
                         break;
                     case 4:
-                        cargoShip = new CargoShip($"L-{GetID()}", GetValue(3000, 20000), GetValue(0, 20), tokenSign:"L", 6, GetValue(0, 500));
+                        cargoShip = new CargoShip($"L-{GetID()}", GetValue(3000, 20000), GetValue(0, 20), tokenSign: "L", 6, GetValue(0, 500));
+                        PlaceVessel(4);
                         break;
                 }
             }
-            Console.Clear();
-            WriteOutHarbour();
-            Console.ReadLine();
+            rowingBoat.Counter--;
+            motorBoat.Counter--;
+            sailingBoat.Counter--;
+            cargoShip.Counter--;
+            DecreaseCounter(rowingBoat);
+        }
+
+        private static Boat DecreaseCounter(Boat boat)
+        {
+            foreach (var vessel in harbour)
+            {
+
+            }
+            boat.Counter--;
+            if (boat.Counter == 0)
+            {
+                
+            }
+            return boat;
+        }
+
+        private static void PlaceVessel(int value)
+        {
+            int emptyslot = 0;
+            int j = 1;
+            foreach (var element in harbour)
+            {
+                emptyslot++;
+                if (harbour[j, 0] is DummyBoat)
+                {
+                    if (emptyslot == value)
+                    {
+                        if (value == 1)
+                        {
+                            harbour[j - 1, 0] = motorBoat;
+                        }
+                        else if (value == 2)
+                        {
+                            harbour[j - 1, 0] = sailingBoat;
+                            harbour[j, 0] = sailingBoat;
+                        }
+                        else if (value == 4)
+                        {
+                            harbour[j - 3, 0] = cargoShip;
+                            harbour[j - 2, 0] = cargoShip;
+                            harbour[j - 1, 0] = cargoShip;
+                            harbour[j, 0] = cargoShip;
+                        }
+                        break;
+                    }
+
+                }
+                else
+                {
+                    emptyslot = 0;
+                }
+                j++;
+                if (j == x)
+                {
+                    break;
+                }
+            }
         }
 
         private static int GetValue(int a, int b)
