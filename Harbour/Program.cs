@@ -5,8 +5,9 @@ namespace Harbour
     class Program
     {
         public static int vesselsPerDay = 5;
-        public static int x = 64;
+        public static int x = 8;
         public static int y = 2;
+        public static int approachingVessel;
         public static Boat[,] harbour = new Boat[x, y];
         public static Random random = new Random();
         public static DummyBoat dummy = new DummyBoat("", 0, 0, tokenSign: " ");
@@ -35,8 +36,8 @@ namespace Harbour
         {
             for (int i = 0; i < vesselsPerDay; i++)
             {
-                int approachingVessel = random.Next(1, 4 + 1);
-                switch (approachingVessel)
+                approachingVessel = random.Next(1, 4 + 1);
+                switch (1)
                 {
                     case 1:
                         rowingBoat = new RowingBoat($"R-{GetID()}", GetValue(100, 300), GetValue(0, 3), tokenSign: "R", 1, GetValue(1, 6));
@@ -62,8 +63,7 @@ namespace Harbour
                         }
                         else if (harbour[x - 1, 0] != dummy || harbour[x - 1, y - 1] != dummy || harbour[x - 2, 0] != dummy || harbour[x - 2, y - 1] != dummy || harbour[x - 3, 0] != dummy)
                         {
-                            int index = Array.IndexOf(harbour, dummy);
-                            harbour[index, 0] = rowingBoat;
+                            PlaceVessel(1);
                         }
                         break;
                     case 2:
@@ -80,41 +80,55 @@ namespace Harbour
                         break;
                 }
             }
-            rowingBoat.Counter--;
-            motorBoat.Counter--;
-            sailingBoat.Counter--;
-            cargoShip.Counter--;
-            DecreaseCounter(rowingBoat);
         }
 
         private static Boat DecreaseCounter(Boat boat)
         {
-            foreach (var vessel in harbour)
-            {
+            Boat[,] temp = harbour.Clone() as Boat[,];
 
-            }
-            boat.Counter--;
-            if (boat.Counter == 0)
+            int index = 0;
+            int index2 = 0;
+            foreach (var slot in harbour)
             {
-                
+                slot.Counter--;
+                if (slot.Counter < 0)
+                {
+                    slot.Counter = 0;
+                }
+                if (slot.Counter == 0 && !(slot is DummyBoat))
+                {
+                    
+                    temp[index, index2] = dummy;
+                }
+                index++;
+                if (index > x && index2 == 0)
+                {
+                    index = 0;
+                    index2++;
+                }
             }
+            harbour = temp;
             return boat;
         }
 
         private static void PlaceVessel(int value)
         {
             int emptyslot = 0;
-            int j = 1;
+            int j = 0;
             foreach (var element in harbour)
             {
-                emptyslot++;
                 if (harbour[j, 0] is DummyBoat)
                 {
+                    emptyslot++;
                     if (emptyslot == value)
                     {
-                        if (value == 1)
+                        if (value == 1 && approachingVessel == 1)
                         {
-                            harbour[j - 1, 0] = motorBoat;
+                            harbour[j, 0] = rowingBoat;
+                        }
+                        else if (value == 1 && approachingVessel == 2)
+                        {
+                            harbour[j, 0] = motorBoat;
                         }
                         else if (value == 2)
                         {
@@ -230,6 +244,11 @@ namespace Harbour
                 }
                 Console.WriteLine();
             }
+
+            DecreaseCounter(rowingBoat);
+            DecreaseCounter(motorBoat);
+            DecreaseCounter(sailingBoat);
+            DecreaseCounter(cargoShip);
         }
         private static string GetID()
         {
