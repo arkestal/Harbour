@@ -5,8 +5,8 @@ namespace HarbourUtkast2
     class Program
     {
         public static int vesselsPerDay = 5;
-        public static int x = 64;
-        public static int y = 64;
+        public static int x = 10;
+        public static int y = 10;
         public static int approachingVessel;
         public static int placementIndex;
         public static Boat[] harbour = new Boat[x];
@@ -282,9 +282,10 @@ namespace HarbourUtkast2
 
             Console.WriteLine("\n");
             Console.WriteLine($"Plats\tBåttyp\t\tID-nr\tVikt\tMaxhastighet\tÖvrigt");
-            int listNumber = 1;
+            int listNumber = 0;
             foreach (var item in harbour)
             {
+                listNumber++;
                 if (harbour[listNumber - 1] is RowingBoat)
                 {
                     Console.WriteLine($"{listNumber}\t{item.Type}\t{item.IdentityNumber}\t{item.Weight} kg\t\t{KnotToKMH(item.TopSpeed)} km/h\t");
@@ -327,7 +328,6 @@ namespace HarbourUtkast2
                         }
                     }
                 }
-                listNumber++;
             }
 
             //DecreaseCounter(rowingBoat);
