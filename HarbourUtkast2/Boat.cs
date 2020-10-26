@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Harbour
+namespace HarbourUtkast2
 {
     class Boat
     {
@@ -21,7 +21,7 @@ namespace Harbour
             TokenSign = tokenSign;
         }
     }
-    
+
     class RowingBoat : Boat
     {
         public int Passengers { get; set; }
