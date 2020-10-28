@@ -10,14 +10,11 @@ namespace HarbourUtkast2
         public static int y = 64;
         public static int approachingVessel;
         public static int placementIndex;
+        public static int daysPassed = 0;
         public static Boat[] harbour = new Boat[x];
         public static Boat[] secondaryHarbour = new Boat[y];
         public static Random random = new Random();
-        public static DummyBoat dummy = new DummyBoat("", "", 0, 0, tokenSign: " ", 0, true);
-        public static RowingBoat rowingBoat;
-        public static MotorBoat motorBoat;
-        public static SailingBoat sailingBoat;
-        public static CargoShip cargoShip;
+
         public static int sailingBoatValue = 0;
         public static int cargoShipValue = 0;
         static void Main(string[] args)
@@ -47,43 +44,43 @@ namespace HarbourUtkast2
                 switch (approachingVessel)
                 {
                     case 1:
-                        rowingBoat = new RowingBoat($"Roddbåt\t", $"R-{GetID()}", GetValue(100, 300), GetValue(0, 3), tokenSign: "R", GetValue(1, 6), 1);
-                        if (harbour[x - 1] is DummyBoat)
-                        {
-                            harbour[x - 1] = rowingBoat;
-                        }
-                        else if (secondaryHarbour[y - 1] is DummyBoat)
-                        {
-                            secondaryHarbour[y - 1] = rowingBoat;
-                        }
-                        else if (harbour[x - 2] is DummyBoat)
-                        {
-                            harbour[x - 2] = rowingBoat;
-                        }
-                        else if (secondaryHarbour[y - 2] is DummyBoat)
-                        {
-                            secondaryHarbour[y - 2] = rowingBoat;
-                        }
-                        else if (harbour[x - 3] is DummyBoat)
-                        {
-                            harbour[x - 3] = rowingBoat;
-                        }
-                        else if (!(harbour[x - 1] is DummyBoat) || !(harbour[x - 2] is DummyBoat) || !(harbour[x - 3] is DummyBoat) || !(secondaryHarbour[y - 1] is DummyBoat) || !(secondaryHarbour[y - 2] is DummyBoat))
-                        {
-                            PlaceVessel(1);
-                        }
+                        //Boat rowingBoat = new RowingBoat($"Roddbåt\t", $"R-{GetID()}", GetValue(100, 300), GetValue(0, 3), tokenSign: "R", GetValue(1, 6), 1);
+                        //if (harbour[x - 1] is DummyBoat)
+                        //{
+                        //    harbour[x - 1] = rowingBoat;
+                        //}
+                        //else if (secondaryHarbour[y - 1] is DummyBoat)
+                        //{
+                        //    secondaryHarbour[y - 1] = rowingBoat;
+                        //}
+                        //else if (harbour[x - 2] is DummyBoat)
+                        //{
+                        //    harbour[x - 2] = rowingBoat;
+                        //}
+                        //else if (secondaryHarbour[y - 2] is DummyBoat)
+                        //{
+                        //    secondaryHarbour[y - 2] = rowingBoat;
+                        //}
+                        //else if (harbour[x - 3] is DummyBoat)
+                        //{
+                        //    harbour[x - 3] = rowingBoat;
+                        //}
+                        //else if (!(harbour[x - 1] is DummyBoat) || !(harbour[x - 2] is DummyBoat) || !(harbour[x - 3] is DummyBoat) || !(secondaryHarbour[y - 1] is DummyBoat) || !(secondaryHarbour[y - 2] is DummyBoat))
+                        //{
+                        //    PlaceVessel(1, rowingBoat);
+                        //}
                         break;
                     case 2:
-                        motorBoat = new MotorBoat($"Motorbåt", $"M-{GetID()}", GetValue(200, 3000), GetValue(0, 60), tokenSign: "M", GetValue(10, 1000), 3);
-                        PlaceVessel(1);
+                        Boat motorBoat = new MotorBoat($"Motorbåt", $"M-{GetID()}", GetValue(200, 3000), GetValue(0, 60), tokenSign: "M", GetValue(10, 1000), 3);
+                        PlaceVessel(1, motorBoat);
                         break;
                     case 3:
-                        sailingBoat = new SailingBoat($"Segelbåt", $"S-{GetID()}", GetValue(800, 6000), GetValue(0, 12), tokenSign: "S", GetValue(10, 60), 4);
-                        PlaceVessel(2);
+                        Boat sailingBoat = new SailingBoat($"Segelbåt", $"S-{GetID()}", GetValue(800, 6000), GetValue(0, 12), tokenSign: "S", GetValue(10, 60), 4);
+                        PlaceVessel(2, sailingBoat);
                         break;
                     case 4:
-                        cargoShip = new CargoShip($"Lastfartyg", $"L-{GetID()}", GetValue(3000, 20000), GetValue(0, 20), tokenSign: "L", GetValue(0, 500), 6);
-                        PlaceVessel(4);
+                        Boat cargoShip = new CargoShip($"Lastfartyg", $"L-{GetID()}", GetValue(3000, 20000), GetValue(0, 20), tokenSign: "L", GetValue(0, 500), 6);
+                        PlaceVessel(4, cargoShip);
                         break;
                 }
             }
@@ -99,7 +96,7 @@ namespace HarbourUtkast2
                     {
                         harbour[index].Counter--;
                     }
-                    else if (harbour[index].Counter < 1)
+                    if (harbour[index].Counter < 1)
                     {
                         if (harbour[index] is CargoShip)
                         {
@@ -137,7 +134,7 @@ namespace HarbourUtkast2
             }
         }
 
-        private static void PlaceVessel(int value)
+        private static void PlaceVessel(int value, Boat boat)
         {
             int emptyslot = 0;
             foreach (var element in harbour)
@@ -146,11 +143,11 @@ namespace HarbourUtkast2
                 {
                     break;
                 }
-                if (harbour[placementIndex] is RowingBoat && element is RowingBoat)
+                if (element is RowingBoat)
                 {
                     if (!(secondaryHarbour[placementIndex] is RowingBoat))
                     {
-                        secondaryHarbour[placementIndex] = rowingBoat;
+                        secondaryHarbour[placementIndex] = boat;
                         break;
                     }
                     //else
@@ -165,21 +162,21 @@ namespace HarbourUtkast2
                     {
                         if (value == 1 && approachingVessel == 1)
                         {
-                            harbour[placementIndex] = rowingBoat;
+                            harbour[placementIndex] = boat;
                         }
-                        else if (value == 1 && approachingVessel == 2)
+                        else if (boat is MotorBoat)
                         {
-                            harbour[placementIndex] = motorBoat;
+                            harbour[placementIndex] = boat;
                         }
-                        else if (value == 2)
+                        else if (boat is SailingBoat)
                         {
-                            harbour[placementIndex - 1] = sailingBoat;
+                            harbour[placementIndex - 1] = boat;
                             harbour[placementIndex].FreeSlot = false;
                             //harbour[placementIndex] = sailingBoat;
                         }
-                        else if (value == 4)
+                        else if (boat is CargoShip)
                         {
-                            harbour[placementIndex - 3] = cargoShip;
+                            harbour[placementIndex - 3] = boat;
                             harbour[placementIndex - 2].FreeSlot = false;
                             harbour[placementIndex - 1].FreeSlot = false;
                             harbour[placementIndex].FreeSlot = false;
@@ -190,7 +187,7 @@ namespace HarbourUtkast2
                         break;
                     }
                 }
-                else if (harbour[placementIndex] is RowingBoat || harbour[placementIndex] is MotorBoat || harbour[placementIndex] is SailingBoat || harbour[placementIndex] is CargoShip)
+                else if (boat is RowingBoat || boat is MotorBoat || boat is SailingBoat || boat is CargoShip)
                 {
                     emptyslot = 0;
                 }
@@ -230,13 +227,14 @@ namespace HarbourUtkast2
             Console.Write("|");
             for (int i = 0; i < x; i++)
             {
-                harbour[i]= new DummyBoat("", "", 0, 0, tokenSign: " ", 0, true);
+                Boat dummy = new DummyBoat("", "", 0, 0, tokenSign: " ", 0, true);
+                harbour[i] = dummy;
                 if (harbour[i] == dummy)
                 {
                     Console.Write(dummy.TokenSign);
 
                 }
-                secondaryHarbour[i] = new DummyBoat("", "", 0, 0, tokenSign: " ", 0, true);
+                secondaryHarbour[i] = dummy;
                 if (secondaryHarbour[i] == dummy)
                 {
                     Console.Write(dummy.TokenSign);
@@ -270,23 +268,23 @@ namespace HarbourUtkast2
             {
                 if (harbour[i] is RowingBoat)
                 {
-                    Console.Write(rowingBoat.TokenSign);
+                    Console.Write("R");
                 }
                 else if (harbour[i] is MotorBoat)
                 {
-                    Console.Write(motorBoat.TokenSign);
+                    Console.Write("M");
                 }
                 else if (harbour[i] is SailingBoat)
                 {
-                    Console.Write(sailingBoat.TokenSign);
+                    Console.Write("S");
                 }
                 else if (harbour[i] is CargoShip)
                 {
-                    Console.Write(cargoShip.TokenSign);
+                    Console.Write("L");
                 }
                 else
                 {
-                    Console.Write(dummy.TokenSign);
+                    Console.Write(" ");
                 }
                 Console.Write(" |");
             }
@@ -296,17 +294,18 @@ namespace HarbourUtkast2
             {
                 if (secondaryHarbour[i] is RowingBoat)
                 {
-                    Console.Write(rowingBoat.TokenSign);
+                    Console.Write("R");
                 }
                 else
                 {
-                    Console.Write(dummy.TokenSign);
+                    Console.Write(" ");
                 }
                 Console.Write(" |");
             }
             Console.WriteLine();
 
             Console.WriteLine("\n");
+            Console.WriteLine($"Passerade dagar: {daysPassed}");
             Console.Write($"Antal båtar i hamn: {NumberOfBoats('R') + NumberOfBoats('M') + (NumberOfBoats('S')) + (NumberOfBoats('L'))}" +
                 $"\tTotal vikt av båtar: " +
                 $"\n\nRoddbåtar:  {NumberOfBoats('R')}" +
@@ -364,7 +363,7 @@ namespace HarbourUtkast2
                 }
                 listNumber++;
             }
-
+            daysPassed++;
             //foreach (var item in harbour)
             //{
             //    DecreaseCounter(item);
