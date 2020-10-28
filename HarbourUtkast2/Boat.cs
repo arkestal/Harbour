@@ -11,66 +11,61 @@ namespace HarbourUtkast2
         public int Weight { get; set; }
         public int TopSpeed { get; set; }
         public string TokenSign { get; set; }
+        public int SpecialProperty { get; set; }
         public int Counter { get; set; }
-        public Boat(string type, string identityNumber, int weight, int topSpeed, string tokenSign)
+        public bool FreeSlot { get; set; }
+        public Boat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty)
         {
             Type = type;
             IdentityNumber = identityNumber;
             Weight = weight;
             TopSpeed = topSpeed;
             TokenSign = tokenSign;
+            SpecialProperty = specialProperty;
         }
     }
 
     class RowingBoat : Boat
     {
-        public int Passengers { get; set; }
-        public RowingBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int passengers)
-            : base(type, identityNumber, weight, topSpeed, "R")
+        public RowingBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
+            : base(type, identityNumber, weight, topSpeed, "R", specialProperty)
         {
             Counter = counter;
-            Passengers = passengers;
         }
     }
 
     class MotorBoat : Boat
     {
-        public int HorsePower { get; set; }
-        public MotorBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int horsePower)
-            : base(type, identityNumber, weight, topSpeed, "M")
+        public MotorBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
+            : base(type, identityNumber, weight, topSpeed, "M", specialProperty)
         {
             Counter = counter;
-            HorsePower = horsePower;
         }
     }
 
     class SailingBoat : Boat
     {
-        public int BoatLenght { get; set; }
-        public SailingBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int boatLenght)
-            : base(type, identityNumber, weight, topSpeed, "S")
+        public SailingBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
+            : base(type, identityNumber, weight, topSpeed, "S", specialProperty)
         {
             Counter = counter;
-            BoatLenght = boatLenght;
         }
     }
 
     class CargoShip : Boat
     {
-        public int ContainerCargo { get; set; }
-        public CargoShip(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int counter, int containerCargo)
-            : base(type, identityNumber, weight, topSpeed, "L")
+        public CargoShip(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
+            : base(type, identityNumber, weight, topSpeed, "L", specialProperty)
         {
             Counter = counter;
-            ContainerCargo = containerCargo;
         }
     }
     class DummyBoat : Boat
     {
-        public DummyBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign)
-            : base("", "", 0, 0, " ")
+        public DummyBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, bool freeSlot)
+            : base("", "", 0, 0, " ", 0)
         {
-
+            FreeSlot = freeSlot;
         }
     }
 }
