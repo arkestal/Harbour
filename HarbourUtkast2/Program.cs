@@ -103,12 +103,16 @@ namespace HarbourUtkast2
                                 harbour[index + 1].FreeSlot = true;
                                 harbour[index + 2].FreeSlot = true;
                                 harbour[index + 3].FreeSlot = true;
+                                harbour[index + 1].TokenSign = " ";
+                                harbour[index + 2].TokenSign = " ";
+                                harbour[index + 3].TokenSign = " ";
 
                             }
                             else if (harbour[index] is SailingBoat)
                             {
                                 harbour[index] = new DummyBoat("", "", 0, 0, " ", 0, true);
                                 harbour[index + 1].FreeSlot = true;
+                                harbour[index + 1].TokenSign = " ";
                             }
                             else
                             {
@@ -170,6 +174,7 @@ namespace HarbourUtkast2
                         {
                             harbour[placementIndex - 1] = boat;
                             harbour[placementIndex].FreeSlot = false;
+                            harbour[placementIndex].TokenSign = ">";
                         }
                         else if (boat is CargoShip)
                         {
@@ -177,6 +182,9 @@ namespace HarbourUtkast2
                             harbour[placementIndex - 2].FreeSlot = false;
                             harbour[placementIndex - 1].FreeSlot = false;
                             harbour[placementIndex].FreeSlot = false;
+                            harbour[placementIndex - 2].TokenSign = "-";
+                            harbour[placementIndex - 1].TokenSign = "-";
+                            harbour[placementIndex].TokenSign = ">";
                         }
                         break;
                     }
@@ -271,9 +279,9 @@ namespace HarbourUtkast2
                 {
                     Console.Write("L");
                 }
-                else
+                else if (harbour[i] is DummyBoat)
                 {
-                    Console.Write(" ");
+                    Console.Write(harbour[i].TokenSign);
                 }
                 Console.Write(" |");
             }
