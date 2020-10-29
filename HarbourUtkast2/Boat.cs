@@ -63,7 +63,7 @@ namespace HarbourUtkast2
     class DummyBoat : Boat
     {
         public DummyBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, bool freeSlot)
-            : base("", "", 0, 0, " ", 0)
+            : base(type, " ", 0, 0, " ", 0)
         {
             FreeSlot = freeSlot;
         }
