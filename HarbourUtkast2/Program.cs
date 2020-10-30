@@ -25,8 +25,32 @@ namespace HarbourUtkast2
         private static void Run()
         {
             bool isRunning = true;
+            bool newLoad = true;
             EmptyHarbour();
-            LoadData();
+            do
+            {
+                Console.WriteLine("Välkommen till hamnen!\n\n[1] Ny simulering\n[2] Ladda senaste simulering");
+                Console.Write("Välj: ");
+                ConsoleKey newOrLoad = Console.ReadKey().Key;
+                Console.Clear();
+                switch (newOrLoad)
+                {
+                    case ConsoleKey.D1:
+                        Console.WriteLine("Startar från dag 1!");
+                        newLoad = false;
+                        Thread.Sleep(2000);
+                        break;
+                    case ConsoleKey.D2:
+                        LoadData();
+                        newLoad = false;
+                        break;
+                    default:
+                        Console.WriteLine("Vänligen välj [1] eller [2]!");
+                        Thread.Sleep(1000);
+                        break;
+                }
+
+            } while (newLoad);
             while (isRunning)
             {
                 DecreaseCounter();
@@ -34,19 +58,18 @@ namespace HarbourUtkast2
                 Console.Clear();
                 WriteOutHarbour();
                 ConsoleKey keyChoice = Console.ReadKey().Key;
+                Console.Clear();
                 switch (keyChoice)
                 {
                     case ConsoleKey.Enter:
                         break;
                     case ConsoleKey.D1:
                         StartOver();
-                        Console.Clear();
                         Console.WriteLine("Startar om från dag 1!");
                         Thread.Sleep(2000);
                         break;
                     case ConsoleKey.D2:
                         isRunning = false;
-                        Console.Clear();
                         Console.WriteLine("Avslutar!");
                         Thread.Sleep(1000);
                         break;
