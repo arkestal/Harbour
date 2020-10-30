@@ -77,6 +77,10 @@ namespace HarbourUtkast2
                     Console.WriteLine("Startar om från dag 0!");
                     Thread.Sleep(2000);
                 }
+                else if (isRunning == false)
+                {
+                    SaveData();
+                }
                 else
                 {
                     DecreaseCounter();
@@ -235,6 +239,7 @@ namespace HarbourUtkast2
 
         private static void DecreaseCounter()
         {
+            daysPassed++;
             for (int index = 0; index < harbour.Length; index++)
             {
                 if (!(harbour[index] is DummyBoat))
@@ -505,7 +510,7 @@ namespace HarbourUtkast2
                 }
                 if (harbour[listNumber - 1] is SailingBoat)
                 {
-                    Console.WriteLine($"{listNumber}-{listNumber + 1}\t{item.Type}\t{item.IdentityNumber}\t{item.Weight}\t{KnotToKMH(item.TopSpeed)} km/h\t{item.SpecialProperty} meter lång\t|");
+                    Console.WriteLine($"{listNumber}-{listNumber + 1}\t{item.Type}\t{item.IdentityNumber}\t{item.Weight}\t{KnotToKMH(item.TopSpeed)} km/h\t{FeetToMetres(item.SpecialProperty)} meter lång\t|");
                     harbour[listNumber].FreeSlot = false;
                 }
                 if (harbour[listNumber - 1] is CargoShip)
@@ -519,8 +524,13 @@ namespace HarbourUtkast2
             }
             Console.WriteLine("-------------------------------------------------------------------------");
             Console.Write("\n[ENTER]:Nästa dag\n[1]:\tStarta om\n[2]:\tAvsluta\nVälj: ");
-            daysPassed++;
-            //placementIndex = 0;
+        }
+
+        private static decimal FeetToMetres(decimal length)
+        {
+            decimal feet = 0.3048M;
+            decimal metre = length * feet;
+            return Math.Round(metre, 1);
         }
 
         private static object EmptyRowBoatSlot()
