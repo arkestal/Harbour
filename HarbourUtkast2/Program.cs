@@ -11,12 +11,10 @@ namespace HarbourUtkast2
         public static int x = 64;
         public static int approachingVessel;
         public static int placementIndex;
-        public static int daysPassed = 1;
+        public static int daysPassed = 0;
         public static Boat[] harbour = new Boat[x];
         public static Boat[] secondaryHarbour = new Boat[x];
         public static Random random = new Random();
-        public static int sailingBoatValue = 0;
-        public static int cargoShipValue = 0;
         static void Main(string[] args)
         {
             Run();
@@ -36,7 +34,7 @@ namespace HarbourUtkast2
                 switch (newOrLoad)
                 {
                     case ConsoleKey.D1:
-                        Console.WriteLine("Startar från dag 1!");
+                        Console.WriteLine("Startar från dag 0!");
                         newLoad = false;
                         Thread.Sleep(2000);
                         break;
@@ -53,8 +51,7 @@ namespace HarbourUtkast2
             } while (newLoad);
             while (isRunning)
             {
-                DecreaseCounter();
-                NewDayHappenings();
+                newLoad = false;
                 Console.Clear();
                 WriteOutHarbour();
                 ConsoleKey keyChoice = Console.ReadKey().Key;
@@ -64,9 +61,7 @@ namespace HarbourUtkast2
                     case ConsoleKey.Enter:
                         break;
                     case ConsoleKey.D1:
-                        StartOver();
-                        Console.WriteLine("Startar om från dag 1!");
-                        Thread.Sleep(2000);
+                        newLoad = true;
                         break;
                     case ConsoleKey.D2:
                         isRunning = false;
@@ -76,7 +71,18 @@ namespace HarbourUtkast2
                     default:
                         break;
                 }
-                SaveData();
+                if (newLoad)
+                {
+                    StartOver();
+                    Console.WriteLine("Startar om från dag 0!");
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    DecreaseCounter();
+                    NewDayHappenings();
+                    SaveData();
+                }
             }
         }
 
@@ -84,7 +90,7 @@ namespace HarbourUtkast2
         {
             File.WriteAllText("savedData.txt", string.Empty);
             EmptyHarbour();
-            daysPassed = 1;
+            daysPassed = 0;
         }
 
         private static void LoadData()
@@ -93,7 +99,7 @@ namespace HarbourUtkast2
             if (new FileInfo("savedData.txt").Length == 0)
             {
                 Console.Clear();
-                Console.WriteLine("Vi börjar från dag 1, då det inte fanns något sparat!");
+                Console.WriteLine("Vi börjar från dag 0, då det inte fanns något sparat!");
                 Thread.Sleep(2000);
                 Console.Clear();
             }
@@ -571,8 +577,15 @@ namespace HarbourUtkast2
                 harbourSpeed += item;
                 counter++;
             }
-            int value = harbourSpeed / counter;
-            return value;
+            if (counter == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                int value = harbourSpeed / counter;
+                return value;
+            }
         }
 
         private static int WeightCheck()
