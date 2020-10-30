@@ -11,13 +11,18 @@ namespace HarbourUtkast2
         public static int x = 64;
         public static int approachingVessel;
         public static int placementIndex;
-        public static int daysPassed = 0;
+        public static int daysPassed = 1;
         public static Boat[] harbour = new Boat[x];
         public static Boat[] secondaryHarbour = new Boat[x];
         public static Random random = new Random();
         public static int sailingBoatValue = 0;
         public static int cargoShipValue = 0;
         static void Main(string[] args)
+        {
+            Run();
+        }
+
+        private static void Run()
         {
             bool isRunning = true;
             EmptyHarbour();
@@ -28,14 +33,35 @@ namespace HarbourUtkast2
                 NewDayHappenings();
                 Console.Clear();
                 WriteOutHarbour();
-                placementIndex = 0;
-                string input = Console.ReadLine();
-                if (input == "q")
+                ConsoleKey keyChoice = Console.ReadKey().Key;
+                switch (keyChoice)
                 {
-                    isRunning = false;
+                    case ConsoleKey.Enter:
+                        break;
+                    case ConsoleKey.D1:
+                        StartOver();
+                        Console.Clear();
+                        Console.WriteLine("Startar om från dag 1!");
+                        Thread.Sleep(2000);
+                        break;
+                    case ConsoleKey.D2:
+                        isRunning = false;
+                        Console.Clear();
+                        Console.WriteLine("Avslutar!");
+                        Thread.Sleep(1000);
+                        break;
+                    default:
+                        break;
                 }
                 SaveData();
             }
+        }
+
+        private static void StartOver()
+        {
+            File.WriteAllText("savedData.txt", string.Empty);
+            EmptyHarbour();
+            daysPassed = 1;
         }
 
         private static void LoadData()
@@ -44,7 +70,7 @@ namespace HarbourUtkast2
             if (new FileInfo("savedData.txt").Length == 0)
             {
                 Console.Clear();
-                Console.WriteLine("Vi börjar från dag 0, då det inte fanns något sparat!");
+                Console.WriteLine("Vi börjar från dag 1, då det inte fanns något sparat!");
                 Thread.Sleep(2000);
                 Console.Clear();
             }
@@ -370,9 +396,32 @@ namespace HarbourUtkast2
                 {
                     Console.Write("L");
                 }
-                else if (harbour[i] is DummyBoat)
+                else if (harbour[i] is DummyBoat && i != 0)
                 {
-                    Console.Write(harbour[i].TokenSign); //Hitta lösning för tokensign när båten är inladdad
+                    if (harbour[i - 1] is SailingBoat)
+                    {
+                        Console.Write(">");
+                    }
+                    else if (harbour[i - 1] is CargoShip && i != 0)
+                    {
+                        Console.Write("-");
+                    }
+                    else if (i > 1 && harbour[i - 2] is CargoShip)
+                    {
+                        Console.Write("-");
+                    }
+                    else if (i > 2 && harbour[i - 3] is CargoShip)
+                    {
+                        Console.Write(">");
+                    }
+                    else
+                    {
+                        Console.Write(harbour[i].TokenSign);
+                    }
+                }
+                else
+                {
+                    Console.Write(harbour[i].TokenSign);
                 }
                 Console.Write(" |");
             }
@@ -400,7 +449,7 @@ namespace HarbourUtkast2
                 $"\nSegelbåtar: {NumberOfBoats('S')}\t\t|Antal lediga platser: \t{EmptySlots()}, plus {EmptyRowBoatSlot()} extra roddbåtsplats(er)" +
                 $"\nLastfartyg: {NumberOfBoats('L')}\t\t|\n");
             Console.WriteLine($"\nPlats\tBåttyp\t\tID-nr\tVikt/KG\tMaxhastighet\tÖvrigt\t\t|");
-            Console.WriteLine("--------------------------------------------------------------------------------------------");
+            Console.WriteLine("-------------------------------------------------------------------------");
             int listNumber = 1;
             foreach (var item in harbour)
             {
@@ -415,7 +464,15 @@ namespace HarbourUtkast2
                 }
                 if (harbour[listNumber - 1] is MotorBoat)
                 {
-                    Console.WriteLine($"{listNumber}\t{item.Type}\t{item.IdentityNumber}\t{item.Weight}\t{KnotToKMH(item.TopSpeed)} km/h  \t{item.SpecialProperty} hästkrafter\t|");
+                    Console.Write($"{listNumber}\t{item.Type}\t{item.IdentityNumber}\t{item.Weight}\t{KnotToKMH(item.TopSpeed)} km/h  \t");
+                    if (item.SpecialProperty > 999)
+                    {
+                        Console.WriteLine($"{item.SpecialProperty} hästkrafter|");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{item.SpecialProperty} hästkrafter\t|");
+                    }
                 }
                 if (harbour[listNumber - 1] is SailingBoat)
                 {
@@ -431,7 +488,10 @@ namespace HarbourUtkast2
                 }
                 listNumber++;
             }
+            Console.WriteLine("-------------------------------------------------------------------------");
+            Console.Write("\n[ENTER]:Nästa dag\n[1]:\tStarta om\n[2]:\tAvsluta\nVälj: ");
             daysPassed++;
+            //placementIndex = 0;
         }
 
         private static object EmptyRowBoatSlot()
