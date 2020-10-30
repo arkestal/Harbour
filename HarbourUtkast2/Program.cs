@@ -469,7 +469,7 @@ namespace HarbourUtkast2
                 $"\t|Avvisade båtar: {Harbour.rejectedBoats}" +
                 $"\n\t\t\t|\nRoddbåtar:  {NumberOfBoats('R')}\t\t|Totala vikt i hamnen: \t{WeightCheck()} kg" +
                 $"\nMotorbåtar: {NumberOfBoats('M')}\t\t|Medeltal toppfart: \t{KnotToKMH(AvarageTopSpeed())} km/h" +
-                $"\nSegelbåtar: {NumberOfBoats('S')}\t\t|Antal lediga platser: \t{EmptySlots()}, plus {EmptyRowBoatSlot()} extra roddbåtsplats(er)" +
+                $"\nSegelbåtar: {NumberOfBoats('S')}\t\t|Antal lediga platser: \t{EmptySlots()}, plus {EmptyRowBoatSlot()} extra roddbåtsplats" +
                 $"\nLastfartyg: {NumberOfBoats('L')}\t\t|\n");
             Console.WriteLine($"\nPlats\tBåttyp\t\tID-nr\tVikt/KG\tMaxhastighet\tÖvrigt\t\t|");
             Console.WriteLine("-------------------------------------------------------------------------");
