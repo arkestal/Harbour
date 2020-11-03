@@ -54,6 +54,10 @@ namespace HarbourUtkast2
                                 Boat sailingBoat = new SailingBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
                                 harbour[counter] = sailingBoat;
                                 break;
+                            case "Katamaran":
+                                Boat catamaran = new Catamaran(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
+                                harbour[counter] = catamaran;
+                                break;
                             case "Lastfartyg":
                                 Boat cargoShip = new CargoShip(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
                                 harbour[counter] = cargoShip;
@@ -170,6 +174,11 @@ namespace HarbourUtkast2
                     Console.Write($"{harbour[i].TokenSign} |> |");
                     i++;
                 }
+                else if (harbour[i] is Catamaran)
+                {
+                    Console.Write($"{harbour[i].TokenSign} |- |> |");
+                    i += 2;
+                }
                 else if (harbour[i] is CargoShip)
                 {
                     Console.Write($"{harbour[i].TokenSign} |- |- |> |");
@@ -195,12 +204,13 @@ namespace HarbourUtkast2
                 Console.Write(" |");
             }
             Console.WriteLine($"\n\nPasserade dagar: {daysPassed}\n");
-            Console.Write($"Antal båtar i hamn: {NumberOfBoats('R') + NumberOfBoats('M') + (NumberOfBoats('S')) + (NumberOfBoats('L'))}" +
+            Console.Write($"Antal båtar i hamn: {NumberOfBoats('R') + NumberOfBoats('M') + NumberOfBoats('S') + NumberOfBoats('K') + NumberOfBoats('L')}" +
                 $"\t|Avvisade båtar: {Harbour.rejectedBoats}" +
-                $"\n\t\t\t|\nRoddbåtar:  {NumberOfBoats('R')}\t\t|Totala vikt i hamnen: \t{GameAndMethods.WeightCheck()} kg" +
-                $"\nMotorbåtar: {NumberOfBoats('M')}\t\t|Medeltal toppfart: \t{GameAndMethods.KnotToKMH(GameAndMethods.AvarageTopSpeed())} km/h" +
-                $"\nSegelbåtar: {NumberOfBoats('S')}\t\t|Antal lediga platser: \t{EmptySlots()}, plus {EmptyRowBoatSlot()} extra roddbåtsplats" +
-                $"\nLastfartyg: {NumberOfBoats('L')}\t\t|\n");
+                $"\n\t\t\t|\nRoddbåtar:   {NumberOfBoats('R')}\t\t|Total vikt i hamnen: \t{GameAndMethods.WeightCheck()} kg" +
+                $"\nMotorbåtar:  {NumberOfBoats('M')}\t\t|Medeltal toppfart: \t{GameAndMethods.KnotToKMH(GameAndMethods.AvarageTopSpeed())} km/h" +
+                $"\nSegelbåtar:  {NumberOfBoats('S')}\t\t|Antal lediga platser: \t{EmptySlots()}, plus {EmptyRowBoatSlot()} extra roddbåtsplats" +
+                $"\nKatamaraner: {NumberOfBoats('K')}\t\t|" +
+                $"\nLastfartyg:  {NumberOfBoats('L')}\t\t|\n");
             Console.WriteLine($"\nPlats\tBåttyp\t\tID-nr\tVikt/KG\tMaxhastighet\tÖvrigt\t\t|");
             Console.WriteLine("-------------------------------------------------------------------------");
             int listNumber = 1;
@@ -223,6 +233,12 @@ namespace HarbourUtkast2
                 {
                     Console.WriteLine($"{listNumber}-{listNumber + 1}\t{item.Type}\t{item.IdentityNumber}\t{item.Weight}\t{GameAndMethods.KnotToKMH(item.TopSpeed)} km/h\t{GameAndMethods.FeetToMetres(item.SpecialProperty)} meter lång\t|");
                     harbour[listNumber].FreeSlot = false;
+                }
+                if (harbour[listNumber - 1] is Catamaran)
+                {
+                    Console.WriteLine($"{listNumber}-{listNumber + 2}\t{item.Type}\t{item.IdentityNumber}\t{item.Weight}\t{GameAndMethods.KnotToKMH(item.TopSpeed)} km/h\t{item.SpecialProperty} bäddplatser\t|");
+                    harbour[listNumber].FreeSlot = false;
+                    harbour[listNumber + 1].FreeSlot = false;
                 }
                 if (harbour[listNumber - 1] is CargoShip)
                 {
@@ -297,6 +313,14 @@ namespace HarbourUtkast2
                             harbour[placementIndex].FreeSlot = false;
                             harbour[placementIndex].TokenSign = ">";
                         }
+                        else if (boat is Catamaran)
+                        {
+                            harbour[placementIndex - 2] = boat;
+                            harbour[placementIndex - 1].FreeSlot = false;
+                            harbour[placementIndex].FreeSlot = false;
+                            harbour[placementIndex - 1].TokenSign = "-";
+                            harbour[placementIndex].TokenSign = ">";
+                        }
                         else if (boat is CargoShip)
                         {
                             harbour[placementIndex - 3] = boat;
@@ -310,7 +334,7 @@ namespace HarbourUtkast2
                         break;
                     }
                 }
-                else if (boat is RowingBoat || boat is MotorBoat || boat is SailingBoat || boat is CargoShip)
+                else if (boat is RowingBoat || boat is MotorBoat || boat is SailingBoat || boat is Catamaran || boat is CargoShip)
                 {
                     emptyslot = 0;
                 }
@@ -384,6 +408,12 @@ namespace HarbourUtkast2
                                 harbour[index] = new DummyBoat(" ", " ", 0, 0, " ", 0, true);
                                 harbour[index + 1].FreeSlot = true; harbour[index + 2].FreeSlot = true; harbour[index + 3].FreeSlot = true;
                                 harbour[index + 1].TokenSign = " "; harbour[index + 2].TokenSign = " "; harbour[index + 3].TokenSign = " ";
+                            }
+                            else if (harbour[index] is Catamaran)
+                            {
+                                harbour[index] = new DummyBoat(" ", " ", 0, 0, " ", 0, true);
+                                harbour[index + 1].FreeSlot = true; harbour[index + 2].FreeSlot = true;
+                                harbour[index + 1].TokenSign = " "; harbour[index + 2].TokenSign = " ";
                             }
                             else if (harbour[index] is SailingBoat)
                             {

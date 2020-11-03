@@ -42,7 +42,7 @@ namespace HarbourUtkast2
         {
             for (int i = 0; i < vesselsPerDay; i++)
             {
-                approachingVessel = random.Next(1, 4 + 1);
+                approachingVessel = random.Next(1, 5 + 1);
                 switch (approachingVessel)
                 {
                     case 1:
@@ -58,6 +58,10 @@ namespace HarbourUtkast2
                         Harbour.PlaceVessel(2, sailingBoat);
                         break;
                     case 4:
+                        Boat catamaran = new Catamaran($"Katamaran", $"K-{GetID()}", GetValue(1200, 8000), GetValue(0, 12), tokenSign: "K", GetValue(1, 4), 3);
+                        Harbour.PlaceVessel(3, catamaran);
+                        break;
+                    case 5:
                         Boat cargoShip = new CargoShip($"Lastfartyg", $"L-{GetID()}", GetValue(3000, 20000), GetValue(0, 20), tokenSign: "L", GetValue(0, 500), 6);
                         Harbour.PlaceVessel(4, cargoShip);
                         break;
@@ -102,6 +106,14 @@ namespace HarbourUtkast2
     {
         public SailingBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
             : base(type, identityNumber, weight, topSpeed, "S", specialProperty)
+        {
+            Counter = counter;
+        }
+    }
+    class Catamaran : Boat
+    {
+        public Catamaran(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
+            : base(type, identityNumber, weight, topSpeed, "K", specialProperty)
         {
             Counter = counter;
         }
