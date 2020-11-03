@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Linq;
 
@@ -74,7 +72,6 @@ namespace HarbourUtkast2
                     string[] boatValue = item.Split(';');
                     if (boatValue[0] == "\r")
                     {
-
                     }
                     else
                     {
@@ -417,6 +414,5 @@ namespace HarbourUtkast2
                 }
             }
         }
-
     }
 }

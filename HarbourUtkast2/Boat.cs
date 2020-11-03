@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HarbourUtkast2
 {
@@ -84,7 +82,6 @@ namespace HarbourUtkast2
             SpecialProperty = specialProperty;
         }
     }
-
     class RowingBoat : Boat
     {
         public RowingBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
@@ -93,7 +90,6 @@ namespace HarbourUtkast2
             Counter = counter;
         }
     }
-
     class MotorBoat : Boat
     {
         public MotorBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
@@ -102,7 +98,6 @@ namespace HarbourUtkast2
             Counter = counter;
         }
     }
-
     class SailingBoat : Boat
     {
         public SailingBoat(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
@@ -111,7 +106,6 @@ namespace HarbourUtkast2
             Counter = counter;
         }
     }
-
     class CargoShip : Boat
     {
         public CargoShip(string type, string identityNumber, int weight, int topSpeed, string tokenSign, int specialProperty, int counter)
