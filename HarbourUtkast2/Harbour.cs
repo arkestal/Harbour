@@ -12,7 +12,6 @@ namespace HarbourUtkast2
         public static int rejectedBoats = 0;
         public static Boat[] harbour = new Boat[x];
         public static Boat[] secondaryHarbour = new Boat[x];
-
         public static void LoadData()
         {
             string dataFiles = File.ReadAllText("savedData.txt");
