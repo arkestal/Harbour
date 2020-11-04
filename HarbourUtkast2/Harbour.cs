@@ -14,89 +14,100 @@ namespace HarbourUtkast2
         public static Boat[] secondaryHarbour = new Boat[x];
         public static void LoadData()
         {
-            string dataFiles = File.ReadAllText("savedData.txt");
-            if (new FileInfo("savedData.txt").Length == 0)
+            try
+            {
+                string dataFiles = File.ReadAllText("savedData.txt");
+                if (new FileInfo("savedData.txt").Length == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Vi börjar från dag 0, då det inte fanns något sparat!");
+                    Thread.Sleep(2000);
+                    Console.Clear();
+                }
+                else
+                {
+                    string[] splitHarbour = dataFiles.Split('$');
+                    string[] harbour1 = splitHarbour[0].Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    string[] harbour2 = splitHarbour[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    int counter = 0;
+                    foreach (var item in harbour1)
+                    {
+                        if (item == harbour1[0])
+                        {
+                            string[] firstRow = item.Split(';');
+                            daysPassed = int.Parse(firstRow[0]);
+                            Harbour.rejectedBoats = int.Parse(firstRow[1]);
+                        }
+                        else
+                        {
+                            string[] boatValue = item.Split(';');
+                            switch (boatValue[0])
+                            {
+                                case "Roddbåt\t":
+                                    Boat rowingBoat = new RowingBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
+                                    harbour[counter] = rowingBoat;
+                                    break;
+                                case "Motorbåt":
+                                    Boat motorBoat = new MotorBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
+                                    harbour[counter] = motorBoat;
+                                    break;
+                                case "Segelbåt":
+                                    Boat sailingBoat = new SailingBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
+                                    harbour[counter] = sailingBoat;
+                                    break;
+                                case "Katamaran":
+                                    Boat catamaran = new Catamaran(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
+                                    harbour[counter] = catamaran;
+                                    break;
+                                case "Lastfartyg":
+                                    Boat cargoShip = new CargoShip(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
+                                    harbour[counter] = cargoShip;
+                                    break;
+                                default:
+                                    Boat dummy = new DummyBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), bool.Parse(boatValue[6]));
+                                    harbour[counter] = dummy;
+                                    break;
+                            }
+                            counter++;
+                        }
+                    }
+                    counter = 0;
+                    foreach (var item in harbour2)
+                    {
+                        string[] boatValue = item.Split(';');
+                        if (boatValue[0] == "\r")
+                        {
+                        }
+                        else
+                        {
+                            switch (boatValue[0])
+                            {
+                                case "Roddbåt\t":
+                                    Boat rowingBoat = new RowingBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
+                                    secondaryHarbour[counter] = rowingBoat;
+                                    break;
+                                default:
+                                    Boat dummy = new DummyBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), bool.Parse(boatValue[6]));
+                                    secondaryHarbour[counter] = dummy;
+                                    break;
+                            }
+                            counter++;
+                        }
+                    }
+                    Console.Clear();
+                    Console.WriteLine($"Laddar in sparad fil och börjar från dag {daysPassed}.");
+                    Thread.Sleep(2000);
+                    Console.Clear();
+                }
+            }
+            catch (Exception)
             {
                 Console.Clear();
                 Console.WriteLine("Vi börjar från dag 0, då det inte fanns något sparat!");
                 Thread.Sleep(2000);
                 Console.Clear();
             }
-            else
-            {
-                string[] splitHarbour = dataFiles.Split('$');
-                string[] harbour1 = splitHarbour[0].Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                string[] harbour2 = splitHarbour[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                int counter = 0;
-                foreach (var item in harbour1)
-                {
-                    if (item == harbour1[0])
-                    {
-                        string[] firstRow = item.Split(';');
-                        daysPassed = int.Parse(firstRow[0]);
-                        Harbour.rejectedBoats = int.Parse(firstRow[1]);
-                    }
-                    else
-                    {
-                        string[] boatValue = item.Split(';');
-                        switch (boatValue[0])
-                        {
-                            case "Roddbåt\t":
-                                Boat rowingBoat = new RowingBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
-                                harbour[counter] = rowingBoat;
-                                break;
-                            case "Motorbåt":
-                                Boat motorBoat = new MotorBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
-                                harbour[counter] = motorBoat;
-                                break;
-                            case "Segelbåt":
-                                Boat sailingBoat = new SailingBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
-                                harbour[counter] = sailingBoat;
-                                break;
-                            case "Katamaran":
-                                Boat catamaran = new Catamaran(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
-                                harbour[counter] = catamaran;
-                                break;
-                            case "Lastfartyg":
-                                Boat cargoShip = new CargoShip(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
-                                harbour[counter] = cargoShip;
-                                break;
-                            default:
-                                Boat dummy = new DummyBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), bool.Parse(boatValue[6]));
-                                harbour[counter] = dummy;
-                                break;
-                        }
-                        counter++;
-                    }
-                }
-                counter = 0;
-                foreach (var item in harbour2)
-                {
-                    string[] boatValue = item.Split(';');
-                    if (boatValue[0] == "\r")
-                    {
-                    }
-                    else
-                    {
-                        switch (boatValue[0])
-                        {
-                            case "Roddbåt\t":
-                                Boat rowingBoat = new RowingBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), int.Parse(boatValue[6]));
-                                secondaryHarbour[counter] = rowingBoat;
-                                break;
-                            default:
-                                Boat dummy = new DummyBoat(boatValue[0], boatValue[1], int.Parse(boatValue[2]), int.Parse(boatValue[3]), boatValue[4], int.Parse(boatValue[5]), bool.Parse(boatValue[6]));
-                                secondaryHarbour[counter] = dummy;
-                                break;
-                        }
-                        counter++;
-                    }
-                }
-                Console.Clear();
-                Console.WriteLine($"Laddar in sparad fil och börjar från dag {daysPassed}.");
-                Thread.Sleep(2000);
-                Console.Clear();
-            }
+            
         }
         public static void SaveData()
         {
